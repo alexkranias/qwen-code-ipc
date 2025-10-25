@@ -15,6 +15,7 @@ import { makeRelative, shortenPath } from '../utils/paths.js';
 import { getErrorMessage, isNodeError } from '../utils/errors.js';
 import type { Config } from '../config/config.js';
 import { ensureRipgrepPath } from '../utils/ripgrepUtils.js';
+import { requestGrepIPC } from '../utils/ipcClient.js';
 
 const DEFAULT_TOTAL_MAX_MATCHES = 20000;
 
@@ -261,6 +262,66 @@ class GrepToolInvocation extends BaseToolInvocation<
   }): Promise<GrepMatch[]> {
     const { pattern, path: absolutePath, include } = options;
 
+    // Try IPC first, fall back to direct ripgrep if IPC fails
+    try {
+      // Build ripgrep options for the IPC request
+      const ipcOptions: Record<string, any> = {
+        line_number: true,
+        no_heading: true,
+        with_filename: true,
+        ignore_case: true,
+        regexp: pattern,
+      };
+
+      if (include) {
+        ipcOptions['glob'] = include;
+      }
+
+      // Add exclude patterns
+      const excludes = [
+        '.git',
+        'node_modules',
+        'bower_components',
+        '*.log',
+        '*.tmp',
+        'build',
+        'dist',
+        'coverage',
+      ];
+      ipcOptions['globs'] = excludes.map(exclude => `!${exclude}`);
+
+      // Add threading option
+      ipcOptions['threads'] = 4;
+
+      // Get workspace path for IPC client
+      const workspaceContext = this.config.getWorkspaceContext();
+      const workspacePath = workspaceContext.getDirectories()[0]; // Use first directory as workspace root
+
+      // Send IPC request instead of spawning ripgrep
+      const output = await requestGrepIPC(
+        workspacePath,
+        pattern,
+        [absolutePath],
+        ipcOptions
+      );
+
+      return this.parseRipgrepOutput(output, absolutePath);
+    } catch (error: unknown) {
+      console.warn(`IPC grep failed, falling back to direct ripgrep: ${getErrorMessage(error)}`);
+
+      // Fall back to original ripgrep spawning logic
+      return this.performRipgrepSearchDirect(options);
+    }
+  }
+
+  private async performRipgrepSearchDirect(options: {
+    pattern: string;
+    path: string;
+    include?: string;
+    signal: AbortSignal;
+  }): Promise<GrepMatch[]> {
+    const { pattern, path: absolutePath, include } = options;
+
     const rgArgs = [
       '--line-number',
       '--no-heading',
@@ -336,7 +397,7 @@ class GrepToolInvocation extends BaseToolInvocation<
 
       return this.parseRipgrepOutput(output, absolutePath);
     } catch (error: unknown) {
-      console.error(`GrepLogic: ripgrep failed: ${getErrorMessage(error)}`);
+      console.error(`GrepLogic: direct ripgrep failed: ${getErrorMessage(error)}`);
       throw error;
     }
   }
