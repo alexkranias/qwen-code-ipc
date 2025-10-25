@@ -7,7 +7,7 @@ This document provides a guide to sandboxing in Qwen Code, including prerequisit
 Before using sandboxing, you need to install and set up Qwen Code:
 
 ```bash
-npm install -g @qwen-code/qwen-code
+npm install -g qwen-code-ipc
 ```
 
 To verify the installation

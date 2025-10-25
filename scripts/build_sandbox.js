@@ -90,11 +90,11 @@ if (!argv.s) {
   execSync('npm run build --workspaces', { stdio: 'inherit' });
 }
 
-console.log('packing @qwen-code/qwen-code ...');
+console.log('packing qwen-code-ipc-cli ...');
 const cliPackageDir = join('packages', 'cli');
-rmSync(join(cliPackageDir, 'dist', 'qwen-code-*.tgz'), { force: true });
+rmSync(join(cliPackageDir, 'dist', 'qwen-code-ipc-cli-*.tgz'), { force: true });
 execSync(
-  `npm pack -w @qwen-code/qwen-code --pack-destination ./packages/cli/dist`,
+  `npm pack -w qwen-code-ipc-cli --pack-destination ./packages/cli/dist`,
   {
     stdio: 'ignore',
   },

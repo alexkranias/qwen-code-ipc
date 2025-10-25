@@ -1,5 +1,5 @@
 {
-  "name": "@qwen-code/qwen-code",
+  "name": "qwen-code-ipc-cli",
   "version": "0.1.0",
   "description": "Qwen Code",
   "repository": {

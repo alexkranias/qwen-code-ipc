@@ -4,10 +4,10 @@
 
 ![Qwen Code Screenshot](./docs/assets/qwen-screenshot.png)
 
-[![npm version](https://img.shields.io/npm/v/@qwen-code/qwen-code.svg)](https://www.npmjs.com/package/@qwen-code/qwen-code)
+[![npm version](https://img.shields.io/npm/v/qwen-code-ipc.svg)](https://www.npmjs.com/package/qwen-code-ipc)
 [![License](https://img.shields.io/github/license/QwenLM/qwen-code.svg)](./LICENSE)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
-[![Downloads](https://img.shields.io/npm/dm/@qwen-code/qwen-code.svg)](https://www.npmjs.com/package/@qwen-code/qwen-code)
+[![Downloads](https://img.shields.io/npm/dm/qwen-code-ipc.svg)](https://www.npmjs.com/package/qwen-code-ipc)
 
 **AI-powered command-line workflow tool for developers**
 
@@ -69,7 +69,7 @@ curl -qL https://www.npmjs.com/install.sh | sh
 ### Install from npm
 
 ```bash
-npm install -g @qwen-code/qwen-code@latest
+npm install -g qwen-code-ipc@latest
 qwen --version
 ```
 

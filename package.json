@@ -1,5 +1,5 @@
 {
-  "name": "@qwen-code/qwen-code",
+  "name": "qwen-code-ipc",
   "version": "0.1.0",
   "engines": {
     "node": ">=20.0.0"
