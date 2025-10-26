@@ -142,7 +142,7 @@ describe('DefaultOpenAICompatibleProvider', () => {
           { role: 'system', content: 'You are a helpful assistant.' },
           { role: 'user', content: 'Hello!' },
         ],
-        temperature: 0.7,
+        temperature: 0.0,
         max_tokens: 1000,
         top_p: 0.9,
         frequency_penalty: 0.1,
@@ -161,7 +161,7 @@ describe('DefaultOpenAICompatibleProvider', () => {
       const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: 'Test message' }],
-        temperature: 0.5,
+        temperature: 0.0,
         max_tokens: 500,
         top_p: 0.8,
         frequency_penalty: 0.3,
@@ -214,7 +214,7 @@ describe('DefaultOpenAICompatibleProvider', () => {
       const originalRequest: OpenAI.Chat.ChatCompletionCreateParams = {
         model: 'gpt-4',
         messages: [{ role: 'user', content: 'Hello' }],
-        temperature: 0.7,
+        temperature: 0.0,
       };
 
       const originalRequestCopy = { ...originalRequest };

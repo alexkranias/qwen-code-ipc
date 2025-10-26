@@ -315,7 +315,7 @@ describe('QwenContentGenerator', () => {
         timeout: 120000,
         maxRetries: 3,
         samplingParams: {
-          temperature: 0.7,
+          temperature: 0.0,
           max_tokens: 1000,
           top_p: 0.9,
         },

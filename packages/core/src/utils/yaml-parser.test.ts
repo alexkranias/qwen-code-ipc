@@ -27,11 +27,11 @@ describe('yaml-parser', () => {
     });
 
     it('should parse nested objects', () => {
-      const yaml = 'modelConfig:\n  temperature: 0.7\n  maxTokens: 1000';
+      const yaml = 'modelConfig:\n  temperature: 0.0\n  maxTokens: 1000';
       const result = parse(yaml);
       expect(result).toEqual({
         modelConfig: {
-          temperature: 0.7,
+          temperature: 0.0,
           maxTokens: 1000,
         },
       });
@@ -54,13 +54,13 @@ describe('yaml-parser', () => {
     it('should stringify nested objects', () => {
       const obj = {
         modelConfig: {
-          temperature: 0.7,
+          temperature: 0.0,
           maxTokens: 1000,
         },
       };
       const result = stringify(obj);
       expect(result).toBe(
-        'modelConfig:\n  temperature: 0.7\n  maxTokens: 1000',
+        'modelConfig:\n  temperature: 0.0\n  maxTokens: 1000',
       );
     });
 

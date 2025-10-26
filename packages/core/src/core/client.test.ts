@@ -2243,7 +2243,7 @@ ${JSON.stringify(
   describe('generateContent', () => {
     it('should call generateContent with the correct parameters', async () => {
       const contents = [{ role: 'user', parts: [{ text: 'hello' }] }];
-      const generationConfig = { temperature: 0.5 };
+      const generationConfig = { temperature: 0.0 };
       const abortSignal = new AbortController().signal;
 
       await client.generateContent(
@@ -2259,7 +2259,7 @@ ${JSON.stringify(
           config: {
             abortSignal,
             systemInstruction: getCoreSystemPrompt(''),
-            temperature: 0.5,
+            temperature: 0.0,
             topP: 1,
           },
           contents,
@@ -2299,7 +2299,7 @@ ${JSON.stringify(
 
     it('should use the Flash model when fallback mode is active', async () => {
       const contents = [{ role: 'user', parts: [{ text: 'hello' }] }];
-      const generationConfig = { temperature: 0.5 };
+      const generationConfig = { temperature: 0.0 };
       const abortSignal = new AbortController().signal;
       const requestedModel = 'gemini-2.5-pro'; // A non-flash model
 

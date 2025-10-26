@@ -234,7 +234,7 @@ describe('DashScopeOpenAICompatibleProvider', () => {
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: 'Hello!' },
       ],
-      temperature: 0.7,
+      temperature: 0.0,
     };
 
     it('should add cache control to system message only for non-streaming requests', () => {
@@ -435,7 +435,7 @@ describe('DashScopeOpenAICompatibleProvider', () => {
     it('should preserve all original request parameters', () => {
       const complexRequest: OpenAI.Chat.ChatCompletionCreateParams = {
         ...baseRequest,
-        temperature: 0.8,
+        temperature: 0.0,
         max_tokens: 1000,
         top_p: 0.9,
         frequency_penalty: 0.1,
@@ -776,7 +776,7 @@ describe('DashScopeOpenAICompatibleProvider', () => {
         model: 'qwen3-coder-plus',
         messages: [{ role: 'user', content: 'Hello' }],
         max_tokens: 100000, // Will be limited
-        temperature: 0.8,
+        temperature: 0.0,
         top_p: 0.9,
         frequency_penalty: 0.1,
         presence_penalty: 0.2,

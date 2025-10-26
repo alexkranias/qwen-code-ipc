@@ -110,7 +110,7 @@ export function usePromptCompletion({
       ];
 
       const generationConfig: GenerateContentConfig = {
-        temperature: 0.3,
+        temperature: 0.0,
         maxOutputTokens: 16000,
         thinkingConfig: {
           thinkingBudget: 0,

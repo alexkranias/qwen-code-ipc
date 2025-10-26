@@ -169,7 +169,7 @@ describe('converter', () => {
         model: 'gemini-pro',
         contents: 'Hello',
         config: {
-          temperature: 0.8,
+          temperature: 0.0,
           topK: 40,
         },
       };
@@ -180,7 +180,7 @@ describe('converter', () => {
         'my-session',
       );
       expect(codeAssistReq.request.generationConfig).toEqual({
-        temperature: 0.8,
+        temperature: 0.0,
         topK: 40,
       });
     });
@@ -190,7 +190,7 @@ describe('converter', () => {
         model: 'gemini-pro',
         contents: 'Hello',
         config: {
-          temperature: 0.1,
+          temperature: 0.0,
           topP: 0.2,
           topK: 3,
           candidateCount: 4,
@@ -211,7 +211,7 @@ describe('converter', () => {
         'my-session',
       );
       expect(codeAssistReq.request.generationConfig).toEqual({
-        temperature: 0.1,
+        temperature: 0.0,
         topP: 0.2,
         topK: 3,
         candidateCount: 4,

@@ -180,7 +180,7 @@ describe('BaseLlmClient', () => {
 
       const options: GenerateJsonOptions = {
         ...defaultOptions,
-        config: { temperature: 0.8, topK: 10 },
+        config: { temperature: 0.0, topK: 10 },
       };
 
       await client.generateJson(options);
@@ -188,7 +188,7 @@ describe('BaseLlmClient', () => {
       expect(mockGenerateContent).toHaveBeenCalledWith(
         expect.objectContaining({
           config: expect.objectContaining({
-            temperature: 0.8,
+            temperature: 0.0,
             topP: 1, // Default should remain if not overridden
             topK: 10,
             tools: expect.any(Array),

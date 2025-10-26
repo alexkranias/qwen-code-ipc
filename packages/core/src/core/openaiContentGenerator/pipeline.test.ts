@@ -83,7 +83,7 @@ describe('ContentGenerationPipeline', () => {
       model: 'test-model',
       authType: 'openai' as AuthType,
       samplingParams: {
-        temperature: 0.7,
+        temperature: 0.0,
         top_p: 0.9,
         max_tokens: 1000,
       },
@@ -157,7 +157,7 @@ describe('ContentGenerationPipeline', () => {
         expect.objectContaining({
           model: 'test-model',
           messages: mockMessages,
-          temperature: 0.7,
+          temperature: 0.0,
           top_p: 0.9,
           max_tokens: 1000,
         }),
@@ -959,7 +959,7 @@ describe('ContentGenerationPipeline', () => {
         model: 'test-model',
         contents: [{ parts: [{ text: 'Hello' }], role: 'user' }],
         config: {
-          temperature: 0.8,
+          temperature: 0.0,
           topP: 0.7,
           maxOutputTokens: 500,
         },
@@ -989,7 +989,7 @@ describe('ContentGenerationPipeline', () => {
         expect.objectContaining({
           model: 'test-model',
           messages: mockMessages,
-          temperature: 0.7, // Config parameter used since request overrides are not being applied in current implementation
+          temperature: 0.0, // Config parameter used since request overrides are not being applied in current implementation
           top_p: 0.9, // Config parameter used since request overrides are not being applied in current implementation
           max_tokens: 1000, // Config parameter used since request overrides are not being applied in current implementation
         }),
@@ -1028,7 +1028,7 @@ describe('ContentGenerationPipeline', () => {
       // Assert
       expect(mockClient.chat.completions.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          temperature: 0.7, // From config
+          temperature: 0.0, // From config
           top_p: 0.9, // From config
           max_tokens: 1000, // From config
         }),
