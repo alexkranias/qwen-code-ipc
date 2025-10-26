@@ -63,7 +63,7 @@
     }
   },
   "bin": {
-    "qwen": "dist/cli.js"
+    "qwen-ipc": "dist/cli.js"
   },
   "files": [
     "dist/",
