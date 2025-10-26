@@ -9,7 +9,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { getErrorMessage } from './errors.js';
 
-const REQUEST_SOCKET_PATH = 'mem_search_service_requests.sock';
+const REQUEST_SOCKET_PATH = '/tmp/mem_search_service_requests.sock';
 const RESPONSE_SOCKET_PREFIX = 'qwen_code_response_';
 
 interface AllocPidRequest {
@@ -34,7 +34,7 @@ interface RipgrepOptions {
 }
 
 interface RequestGrepRequest {
-  type: 'request_grep';
+  type: 'request_ripgrep';
   pid: number;
   pattern: string;
   paths: string[];
@@ -78,14 +78,16 @@ class IPCClient {
 
     try {
       // Connect to the central request socket
-      this.requestSocket = await this.connectToSocket(path.join(this.workspacePath, REQUEST_SOCKET_PATH));
+      this.requestSocket = await this.connectToSocket(REQUEST_SOCKET_PATH);
 
       // Allocate PID and set up response socket
       await this.allocatePid();
 
       this.isInitialized = true;
     } catch (error) {
-      throw new Error(`Failed to initialize IPC client: ${getErrorMessage(error)}`);
+      throw new Error(
+        `Failed to initialize IPC client: ${getErrorMessage(error)}`,
+      );
     }
   }
 
@@ -95,14 +97,14 @@ class IPCClient {
   async requestGrep(
     pattern: string,
     paths: string[],
-    options?: RipgrepOptions
+    options?: RipgrepOptions,
   ): Promise<string> {
     if (!this.isInitialized || !this.requestSocket) {
       throw new Error('IPC client not initialized');
     }
 
     const request: RequestGrepRequest = {
-      type: 'request_grep',
+      type: 'request_ripgrep',
       pid: process.pid,
       pattern,
       paths,
@@ -126,7 +128,9 @@ class IPCClient {
       try {
         this.requestSocket.destroy();
       } catch (error) {
-        console.warn(`Error cleaning up request socket: ${getErrorMessage(error)}`);
+        console.warn(
+          `Error cleaning up request socket: ${getErrorMessage(error)}`,
+        );
       }
       this.requestSocket = null;
     }
@@ -135,7 +139,9 @@ class IPCClient {
       try {
         this.responseSocket.destroy();
       } catch (error) {
-        console.warn(`Error cleaning up response socket: ${getErrorMessage(error)}`);
+        console.warn(
+          `Error cleaning up response socket: ${getErrorMessage(error)}`,
+        );
       }
       this.responseSocket = null;
     }
@@ -160,7 +166,11 @@ class IPCClient {
 
       socket.on('error', (error) => {
         clearTimeout(timeoutId);
-        reject(new Error(`Failed to connect to socket ${socketPath}: ${error.message}`));
+        reject(
+          new Error(
+            `Failed to connect to socket ${socketPath}: ${error.message}`,
+          ),
+        );
       });
     });
   }
@@ -183,11 +193,16 @@ class IPCClient {
     }
 
     // Now connect to our dedicated response socket
-    this.responseSocketPath = path.join(this.workspacePath, `${RESPONSE_SOCKET_PREFIX}${process.pid}.sock`);
+    this.responseSocketPath = path.join(
+      '/tmp',
+      `${RESPONSE_SOCKET_PREFIX}${process.pid}.sock`,
+    );
     this.responseSocket = await this.connectToSocket(this.responseSocketPath);
   }
 
-  private async sendRequest<T extends ResponseMessage>(request: RequestMessage): Promise<T> {
+  private async sendRequest<T extends ResponseMessage>(
+    request: RequestMessage,
+  ): Promise<T> {
     if (!this.requestSocket) {
       throw new Error('Request socket not connected');
     }
@@ -204,7 +219,9 @@ class IPCClient {
           resolve(response);
         } catch (error) {
           cleanup();
-          reject(new Error(`Failed to parse response: ${getErrorMessage(error)}`));
+          reject(
+            new Error(`Failed to parse response: ${getErrorMessage(error)}`),
+          );
         }
       };
 
@@ -234,7 +251,10 @@ class IPCClient {
 
         // For alloc_pid, receive response on request socket
         // For other requests, receive on response socket
-        const responseSocket = request.type === 'alloc_pid' ? this.requestSocket : this.responseSocket;
+        const responseSocket =
+          request.type === 'alloc_pid'
+            ? this.requestSocket
+            : this.responseSocket;
 
         if (responseSocket) {
           responseSocket.once('data', onData);
@@ -262,7 +282,10 @@ let cleanupHandlerRegistered = false;
  * Get or create the IPC client instance
  */
 export function getIPCClient(workspacePath: string): IPCClient {
-  if (!ipcClientInstance || ipcClientInstance['workspacePath'] !== workspacePath) {
+  if (
+    !ipcClientInstance ||
+    ipcClientInstance['workspacePath'] !== workspacePath
+  ) {
     ipcClientInstance = new IPCClient(workspacePath);
   }
   return ipcClientInstance;
@@ -271,7 +294,9 @@ export function getIPCClient(workspacePath: string): IPCClient {
 /**
  * Initialize the IPC client
  */
-export async function initializeIPCClient(workspacePath: string): Promise<void> {
+export async function initializeIPCClient(
+  workspacePath: string,
+): Promise<void> {
   const client = getIPCClient(workspacePath);
   await client.initialize();
 }
@@ -283,7 +308,7 @@ export async function requestGrepIPC(
   workspacePath: string,
   pattern: string,
   paths: string[],
-  options?: RipgrepOptions
+  options?: RipgrepOptions,
 ): Promise<string> {
   const client = getIPCClient(workspacePath);
   await client.initialize();
